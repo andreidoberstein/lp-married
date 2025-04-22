@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tempo de Casados</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ffe0e9, #fff);
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+
+    h1 {
+      color: #c2185b;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .timer {
+      font-size: 1.3rem;
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      max-width: 500px;
+      line-height: 1.8;
+    }
+
+    .bg {
+      border-radius: 20px;
+      height: 90vh;
+      width: 90vw;
+      justify-content: center;
+      align-items: center;
+      background-image: url('SAVE.jpg');
+      background-position: center; /* Center the image */
+      background-repeat: no-repeat; /* Do not repeat the image */
+      background-size: cover;
+      margin: 10px 10px 10px 10px;
+      display: flex;
+    flex-direction: column;
+    }
+  </style>
+</head>
+<body >
+  <div class="bg">
+    <h1>Tempo de Casados 💍</h1>
+  <div class="timer" id="timer">
+    Calculando...
+  </div>
+  </div>
+
+  <script>
+    function calcularTempoDesde(dataInicial) {
+      const agora = new Date();
+      const inicio = new Date(dataInicial);
+
+      let anos = agora.getFullYear() - inicio.getFullYear();
+      let meses = agora.getMonth() - inicio.getMonth();
+      let dias = agora.getDate() - inicio.getDate();
+
+      if (dias < 0) {
+        meses--;
+        const ultimoDiaMesAnterior = new Date(agora.getFullYear(), agora.getMonth(), 0).getDate();
+        dias += ultimoDiaMesAnterior;
+      }
+
+      if (meses < 0) {
+        anos--;
+        meses += 12;
+      }
+
+      const totalMs = agora - inicio;
+      const totalSegundos = Math.floor(totalMs / 1000);
+      const totalMinutos = Math.floor(totalSegundos / 60);
+      const totalHoras = Math.floor(totalMinutos / 60);
+      const totalDias = Math.floor(totalHoras / 24);
+      const totalSemanas = Math.floor(totalDias / 7);
+
+      const restoHoras = totalHoras % 24;
+      const restoMinutos = totalMinutos % 60;
+      const restoSegundos = totalSegundos % 60;
+
+      return {
+        anos, meses, dias,
+        totalSemanas,
+        horas: restoHoras,
+        minutos: restoMinutos,
+        segundos: restoSegundos
+      };
+    }
+
+    function atualizarTempo() {
+      const dataCasamento = '2022-06-18T00:00:00'; // Altere aqui
+      const tempo = calcularTempoDesde(dataCasamento);
+
+      document.getElementById('timer').innerHTML = `
+        ${tempo.anos} anos,
+        ${tempo.meses} meses e ${tempo.dias} dias
+        ${tempo.totalSemanas} semanas<br><br>
+        ${tempo.horas} horas, ${tempo.minutos} minutos, ${tempo.segundos} segundos
+      `;
+    }
+
+    setInterval(atualizarTempo, 1000);
+    atualizarTempo();
+  </script>
+</body>
+</html>
